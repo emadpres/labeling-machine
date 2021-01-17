@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="{{ url_for('static', filename='img/tag_icon.png') }}">
+    <title>The Labeling Machine</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet">
+    {% block headerStuff %}
+    {% endblock %}
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="/">
+            <img src="{{ url_for('static', filename='img/tag_logo.svg') }}" width="30" height="30" alt="">
+            Labeling Machine
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapseData"
+                aria-controls="navbarCollapseData" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapseData">
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" id="navbar-home" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="navbar-stat" href="/stat">Stats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="navbar-labeling" href="/labeling">Label</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="navbar-reviewing" href="/reviewing">Review</a>
+                </li>
+
+                {#            <li class="nav-item dropdown">#}
+                {#                <a class="nav-link dropdown-toggle" href="#" id="navbar-doc" data-toggle="dropdown"#}
+                {#                   aria-haspopup="true" aria-expanded="false">#}
+                {#                    Doc#}
+                {#                </a>#}
+                {#                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">#}
+                {#                    <!--<a class="dropdown-item" target="_blank" href="https://docs.google.com/spreadsheets/d/1MjFEn-SZM7fXzIrCThwAp9L8otDitI_iHV_csPht0Zc/edit?usp=sharing">Tags</a>-->#}
+                {#                    <a class="dropdown-item" target="_blank" href="/faq">FAQ</a>#}
+                {#                </div>#}
+                {#            </li>#}
+
+            </ul>
+
+            {% if user_info %}
+            <ul class="navbar-nav" style="right: 0">
+               <li class="navbar-text badges" style="color: white;">
+                   <span class="badge1" title="Number of artifacts labeled by you"></span> <span>{{ user_info['total_n_api'] }}</span>
+                   <span class="badge2" title="Number of sentences labeled by you"></span> <span>{{ user_info['total_n_sentence'] }}</span>
+                    <span class="badge3" title="Number of artifacts reviewed by you"></span> <span>{{ user_info['total_n_reviewed'] }}</span>
+               </li>
+
+               <li class="nav-item">
+                   <a class="nav-link" href="/signout">Log Out ({{ session["username"] }})</a>
+               </li>
+            </ul>
+            {% endif %}
+
+        </div>
+    </nav>
+
+    <div class="navbarPadding">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+{#    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>#}
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    {% block scriptsStuff %}
+    {% endblock %}
+</body>
+</html>

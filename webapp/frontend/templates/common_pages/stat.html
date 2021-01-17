@@ -1,0 +1,93 @@
+{% extends "common_pages/common_layout.html" %}
+
+
+{% block headerStuff %}
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="bg">
+        <main role="main" class="container main-box">
+            <div class="jumbotron" style="padding: 2rem;">
+                <hr>
+                <div style="width: 50%; margin-left: auto; margin-right: auto;">
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><span class="badge1"/> APIs</th>
+                            <th><span class="badge2"/> Sentences</th>
+                            <th><span class="badge3"/> Reviewed</th>
+                        </tr>
+                        <tr>
+                            <td style="padding-top: 10px;"></td>
+                        </tr>
+                        {% for labelingStatDict in users_labeling_stat %}
+                            <tr>
+                                <td><b>{{ labelingStatDict['username'] }}</b></td>
+                                <td>{% if labelingStatDict['total_n_artifact']!=0 %}
+                                    {{ labelingStatDict['total_n_artifact'] }} {% endif %}</td>
+                                <td>{% if labelingStatDict['total_n_sentence']!=0 %}
+                                    {{ labelingStatDict['total_n_sentence'] }} {% endif %}</td>
+                                <td>{% if labelingStatDict['total_n_reviewed']!=0 %}
+                                    {{ labelingStatDict['total_n_reviewed'] }} {% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+                    <br>
+                    <hr>
+                    <br>
+                    {% for source_id, s_info in sources_labeling_stat.items() %}
+                        <em><b>{{ s_info['source_name'] }}</b></em>
+                        <br>
+                        Labeling
+                        <span style="float: right"><b>{{ s_info['n_artifacts_labeled'] }}</b> out of <b>{{ s_info['n_artifacts_to_be_labeled'] }}</b></span>
+                        <div class="progress progress-bar-striped bg-info">
+                            <div id="source-pb-{{ source_id }}-label" class="progress-bar" role="progressbar"
+                                 style="width: 0%;"
+                                 aria-valuenow="0"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">?
+                            </div>
+                        </div>
+                        Reviewing
+                        <span style="float: right"><b>{{ s_info['n_artifacts_reviewed'] }}</b> out of <b>{{ s_info['n_artifacts_to_be_labeled'] }}</b></span>
+
+                        <div class="progress progress-bar-striped bg-success">
+                            <div id="source-pb-{{ source_id }}-review" class="progress-bar" role="progressbar"
+                                 style="width: 0%;"
+                                 aria-valuenow="0"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">?
+                            </div>
+                        </div>
+                        <br>
+                    {% endfor %}
+                </div>
+                <hr>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        {% for source_id, s_info in sources_labeling_stat.items() %}
+            var labelProgressPercentage = {{ s_info['n_artifacts_labeled'] }}*100 /{{ s_info['n_artifacts_to_be_labeled'] }};
+            labelProgressPercentage = Math.ceil(labelProgressPercentage);
+            document.getElementById("source-pb-{{ source_id }}-label").style.width = labelProgressPercentage + '%';
+            document.getElementById("source-pb-{{ source_id }}-label").innerHTML = labelProgressPercentage + '%';
+
+            var reviewingProgressPercentage = {{ s_info['n_artifacts_reviewed'] }}*100 /{{ s_info['n_artifacts_to_be_labeled'] }};
+            reviewingProgressPercentage = Math.ceil(reviewingProgressPercentage);
+            document.getElementById("source-pb-{{ source_id }}-review").style.width = reviewingProgressPercentage + '%';
+            document.getElementById("source-pb-{{ source_id }}-review").innerHTML = reviewingProgressPercentage + '%';
+        {% endfor %}
+
+        document.getElementById('navbar-stat').classList.add('active');
+        document.getElementById('navbar-stat').setAttribute('href', '#');
+        {% if not session['username'] %}
+            document.getElementById('navbar-labeling').remove();
+            document.getElementById('navbar-reviewing').remove();
+        {%  endif %}
+    </script>
+{% endblock %}

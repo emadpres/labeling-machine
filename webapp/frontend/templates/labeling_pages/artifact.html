@@ -1,0 +1,12 @@
+{% extends "labeling_pages/labeling_layout.html" %}
+
+
+{% block artifact_content %}
+    <h1>Artifact {{ artifact_id }}</h1>
+    {% if all_taggers is not none and all_taggers | length > 0 %}
+        <h2>Taggers: {{ all_taggers }}</h2>
+    {% else %}
+        <h2>Taggers: {{ all_taggers | length }} tagger</h2>
+    {% endif %}
+
+{% endblock %}

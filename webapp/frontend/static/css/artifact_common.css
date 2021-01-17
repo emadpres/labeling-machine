@@ -1,0 +1,25 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    color: white;
+	background-color: black;
+    padding: 0.3rem;
+
+
+    position: fixed;
+    top: 3.5rem;
+    left: 0;
+    right: 0;
+    z-index: 1031;
+}
+
+.lower-panel {
+    background-color: #5a6268;
+    border: 0px solid black;
+    border-top-width: 2px;
+    padding:5px 10px;
+}

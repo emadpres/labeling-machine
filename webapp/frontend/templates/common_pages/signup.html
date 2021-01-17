@@ -1,0 +1,83 @@
+{% extends "common_pages/common_layout.html" %}
+
+{% block content %}
+    <div class="bg">
+        <main role="main" class="container main-box">
+            <div class="jumbotron">
+                <h1>Complete your information</h1>
+                <p class="lead">Hi {{ username }} 😊! Please let us know more about you:</p>
+                <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                    <form id="user_form" data-toggle="validator" role="form" action="/signup" method="post">
+                        <div class="form-group">
+                            <input id="name" name="name" type="hidden" value={{ username }}>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender:</label>
+                            <select class="form-control" id="gender" name="gender" required>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Other</option>
+                                <option>Secret</option>
+                            </select>
+                            <small id="genderHelp" class="form-text text-muted">We'll never share your information with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="education">Education background:</label>
+                            <select class="form-control" id="education" name="education" required>
+                                <option>Bachelor</option>
+                                <option>Master</option>
+                                <option>PhD</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="occupation">Occupation:</label>
+                            <select class="form-control" id="occupation" name="occupation" required>
+                                <option>Student</option>
+                                <option>PostDoc</option>
+                                <option>Faculty</option>
+                                <option>Practitioner</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="affiliation">Affiliation:</label>
+                            <input type="text" class="form-control" id="affiliation" name="affiliation" placeholder="Research group, University, Country">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="years_xp">Years of development experience:</label>
+                            <select class="form-control" id="years_xp" name="years_xp" required>
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option value="100">over 15</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="name" value="">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.getElementById('navbar-labeling').classList.add('disabled');
+        document.getElementById('navbar-labeling').remove();
+        document.getElementById('navbar-reviewing').remove();
+    </script>
+{% endblock %}

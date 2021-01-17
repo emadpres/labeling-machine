@@ -1,0 +1,126 @@
+{% extends "common_pages/common_layout.html" %}
+
+{% block headerStuff %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    {#    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"#}
+    {#          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">#}
+    {#    <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css" rel="stylesheet">#}
+    {#    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>#}
+    {#    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>#}
+    {#    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/shift-away.css"/>#}
+    <link href="{{ url_for('static', filename='css/artifact_common.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+    <div class="header">
+        <div style="">
+            <button class="btn btn-sm btn-outline-danger"
+                    type="submit"
+                    id="fpBtn"
+                    onclick="ToggleFlagBtn({{ artifact_id }})"
+                    title="This artifact is irrelevant to our aim"
+                    style="">Flag (?)
+            </button>
+
+            <button class="btn btn-sm btn-outline-info"
+                    type="submit"
+                    id="interestingBtn"
+                    onclick="ToggleInterestingBtn({{ artifact_id }})"
+                    title="This artifact seems a good example to be discussed in the paper"
+                    style="">Interesting (?)
+            </button>
+        </div>
+        <div style="width: 25%">
+            <div style="text-align: center; font-size: small;">
+                {{ overall_labeling_status['n_artifacts_labeled'] }}
+                out of
+                {{ overall_labeling_status['n_artifacts_to_be_labeled'] }} | <em>{{ overall_labeling_status['source_name'] }}</em>
+            </div>
+            <div class="progress">
+                <div id="top-progress-bar-status" class="progress-bar" role="progressbar" style="width: 0%;"
+                     aria-valuenow="0"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-outline-success"
+                type="submit"
+                id="next-skip-btn"
+                onclick="skip_next_artifact()"
+                style="width: 15%"> Skip
+        </button>
+
+    </div> <!--End of Header -->
+
+    <div class="headerPadding">
+        {% block artifact_content %}
+        {% endblock %}
+    </div>
+
+    <div class="lower-panel fixed-bottom ">
+        <form class="form-inline" style="justify-content: center;" id="form1">
+            <div class="form-group mx-sm-3 mb-2">
+                <select class="js-example-basic-single" name="labeling_data" id="label_selector" style="width: 400px">
+                    <option value='' selected="selected"></option>
+                    {% for item in existing_labeling_data %}
+                        <option value="{{ item }}" title="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="button" id="submit_btn" form="form1" class="btn btn-primary mb-2" disabled>Submit</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scriptsStuff %}
+
+    <script>
+
+        $(document).ready(function () {
+            window.startTime = (new Date()).getTime();
+            document.getElementById('navbar-labeling').classList.add('active');
+            document.getElementById('navbar-labeling').setAttribute('href', '#');
+            InitProgressbar({{ overall_labeling_status['n_artifacts_labeled'] }},
+                {{ overall_labeling_status['n_artifacts_to_be_labeled'] }});
+            InitFlagBtn({{ artifact_id }});
+            InitInterestingBtn({{ artifact_id }});
+
+            // Implement Here
+            $('#label_selector').select2(
+                    {   tags: true,
+                        width: 'resolve',
+                        placeholder: "Select a label",
+                        allowClear: true
+                    }
+            );
+
+            $(document.body).on("change","#label_selector",function(){
+                if(this.value == "")
+                    $("#submit_btn").attr('disabled', "");
+                else
+                    $("#submit_btn").removeAttr('disabled');
+            });
+
+            $("#submit_btn").click(function () {
+                let data_json = {     artifact_id: {{  artifact_id }},
+                                                labeling_data: $('#label_selector').val(),
+                                                duration: get_elapsed_seconds()};
+                {#let data = JSON.stringify(data_json);#}
+                $.post("/label", data_json, function (response, status) {
+                    let response_json = $.parseJSON(response.toString())
+                    ShowNotification(response_json['status'], "success");
+                    ChangeSkipToNext();
+                });
+            });
+
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="{{ url_for('static', filename='js/notification.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/header.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/commonFunc.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/bootstrap-confirmation.min.js') }}"></script>
+{% endblock %}

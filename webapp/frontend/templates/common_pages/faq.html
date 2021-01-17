@@ -1,0 +1,74 @@
+{% extends "common_pages/common_layout.html" %}
+
+
+{% block headerStuff %}
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="bg">
+        <main role="main" class="container">
+            <div class="jumbotron">
+                <h4>General</h4>
+                <a href="#q-goal">(1) What is the goal?</a> <br>
+                <a href="#q-whichSentence">(2) Which “sentences” should be labeled?</a><br>
+                <a href="#q-fp">(3) When to mark as “False Positive”?</a><br>
+                <a href="#q-verification">(4) When to mark as "Needs verification”?</a><br>
+
+                <br>
+                <h4>Tag Specific</h4>
+                <a href="#q-solution">(5) Thinking about the "solution"? Is it about the solution described in the artifact? or is it about the solution we propose?</a><br>
+                <a href="#example1">(6) GitHub issue: <pre style="display: inline">'Add example to serializer component docs'.</pre> To me it looks simple: issue: missing example, solution: add example. but since we have predefined tags, it falls under completeness(?), so I should use that?</a><br>
+
+                <br>
+                <h4>Other</h4>
+                <a href="#vs">(7) What's the difference btw *User guide* and *Developer Guide*?</a><br>
+                <hr>
+
+
+
+
+                <hr>
+                <h5 id="q-goal">(1) What is the goal?</h5>
+                <p>The goal of the paper is categorizing documentation issues in order to define a research agenda for the SE community. The classification is done at sentence level, so for a single artefact we can have multiple dimensions classified with multiple tags</p>
+
+                <hr>
+                <h5 id="q-whichSentence">(2) Which “sentences” should be labeled?</h5>
+                <p>The sentences of interest are those related to the five dimension we classify: issue, solution, actor, type, tool. </p>
+
+                <hr>
+                <h5 id="q-fp">(3) When to mark as “False Positive”?</h5>
+                <p>if an artifact (1) is empty , or (2) is not related to a documentation issue, we classify it as false positive, otherwise we proceed in the classification.</p>
+
+                <hr>
+                <h5 id="q-verification">(4) When to mark as "Needs verification”?</h5>
+                <p>to mark something that is worth discussing between us once the first set of documents has been tagged. so it is not like "I will visit this tag later" and it’s to mark it in the database as in need for further check/discussion</p>
+
+
+                <hr>
+                <h5 id="q-solution">(5) Thinking about the "solution"? Is it about the solution described in the artifact? or is it about the solution we propose?</h5>
+                <p>We do not propose or guess. We are labelling what is in the artefact.</p>
+
+                <hr>
+                <h5 id="example1">(6) GitHub issue: <pre style="display: inline">'Add example to serializer component docs'</pre>. To me it looks simple: issue: missing example, solution: add example. but since we have predefined tags, it falls under completeness(?), so I should use that?</h5><br>
+                <p>We can follow the following practice to keep hierarchies: "Completeness: Missing working examples".</p>
+
+                <hr>
+                <h5 id="vs">(7) What's the difference btw *User guide* and *Developer Guide*?</h5>
+                <p>If the tool is an API, the users and developers are the same. if the tool is a system, users and developers are different. User manual can be also technical (like the guide for installing haddop)</p>
+
+                <hr>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('navbar-doc').classList.add('active');
+        {% if not session['username'] %}
+            document.getElementById('navbar-labeling').remove();
+            document.getElementById('navbar-reviewing').remove();
+        {%  endif %}
+    </script>
+{% endblock %}

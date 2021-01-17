@@ -1,0 +1,39 @@
+{% extends "common_pages/common_layout.html" %}
+
+{% block content %}
+    <div class="bg">
+        <main role="main" class="container main-box">
+            <div class="p-3 mb-2 bg-light text-dark">
+                <h1 align="center">{{ user_info['username'] }},
+                    {%  if user_info['total_n_api']<=0 %}
+                        Welcome!
+                    {%  else %}
+                        Welcome back !
+                    {% endif %}
+                </h1>
+                <br/>
+                <br/>
+                <p class="lead">So far, you labeled  <strong>{{ user_info['total_n_api'] }}</strong>  API.
+                    {%  if user_info['total_n_api']<=0 %}
+                        Let's do the first...
+                    {%  else %}
+                        Great job!
+                    {% endif %}
+                </p>
+                <br/>
+                <div class="col-12 col-md-3 mx-auto">
+                {%  if user_info['total_n_api']<=0 %}
+                    <a href="{{ currentTask }}" class="btn btn-block btn-lg btn-success">💥 Start 💥</a>
+                {%  else %}
+                    <a href="{{ currentTask }}" class="btn btn-block btn-lg btn-success">💥 Continue 💥</a>
+                {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('navbar-home').classList.add('active');
+        document.getElementById('navbar-home').setAttribute('href', '#');
+    </script>
+{% endblock %}
