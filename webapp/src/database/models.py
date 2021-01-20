@@ -58,8 +58,9 @@ class LabelingData(db.Model):
     labeling_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     artifact_id = db.Column(db.Integer)
 
-    labeling = db.Column(db.Text)
-    remark = db.Column(db.Text)
+    # update the following two lines to store labeled data from users
+    labeling = db.Column(db.Text)   # actual data provided by labelers
+    remark = db.Column(db.Text)     # optional data provided by labelers
 
     username = db.Column(db.Text)
     duration_sec = db.Column(db.Integer)

@@ -1,5 +1,17 @@
 # Labeling Machine (lm) Platform
 
+
+**Labeling Machine** is a web application written in Python that is intended to be used by researchers for _labeling data_ with minimum effort. Here are some of its key features:  
++ **Very lightweight**: The tool is based on [Flask](https://flask.palletsprojects.com)
++ **Ready to go and Dockerized**: Just follow [Deployment](https://github.com/emadpres/labeling-machine#deployment-with-docker) section to see a demo of the tool in 15 minutes
++ **Easy to customize**: Follow [Customizing the Project](https://github.com/emadpres/labeling-machine#customizing-the-project) steps to quickly adopt teh tool for your project
+
+
+### Backstory
+Labeling Machine was originally implemented back in 2019 to be internally used for our empirical [research study](https://dl.acm.org/doi/10.1109/ICSE.2019.00122) which involved labeling data from StackOverflow, Apache Mailing Lists, and GitHub issues and PRs. Later is went through several iterations and been used in more studies.  As the tool became more mature and proven to be a practically useful tool, I decided to make it available to all researchers as an open-source tool.  
+   
+
+
 ## Setting-Up Project for Development
 
 ### Requirements
@@ -63,6 +75,21 @@ $ source [Project]/venv/bin/activate
 (venv)$ flask run     # run the WebApp
 ```
 
+## Customizing the Project
+Please follow steps below for customizing the project to your needs. For all steps I already implemented a sample showcase. If something is not clear, make sure to open an [issue](https://github.com/emadpres/labeling-machine/issues).
+1. **Importing your artifacts to be labeled**:
+    1. Update database scheme to store artifacts to be labeled on `Artifact` table. For that, simply update `Artifact` class in `models.py`.
+    2. Update `initdb.py > import_my_data()` method to import your artifact data.
+    3. Run `initdb` configuration to perform the initialization (see _Run Project_ sections above to learn more)
+2. **Displaying artifacts to labelers**:
+    1. Update `routes_labeling.py > labeling_with_artifact(target_artifact_id)` method to send the content required to be displayed (i.e., the artifact content)
+    2. Update `artifact.html` to display the artifact in the way you like (_NOTE:_ HTML files are written in _Jinja_ web template language. Don't afraid. With Jinja syntax you technically have access to Python objects you sent in the previous step)
+3. **Update the logic to collect labeled data**:
+    1. Design your own input form in `labeling_layout.html` to collect labeling data. (_NOTE:_ For the showcase, I already implemented a simple pull-down menu that users can either (1) create a new label and select it, or (2) select a label among previously created labels (by any user).
+    2. Update database schema to store submitted data on `LabelingData` table. For that, simply update `LabelingData` class in `models.py`.   
+    3. Store submitted labels on the database by updating `routes_labeling.py > label()` method.
+
+**Database Technology**: By default, the tool uses _SQLite_ as the database technology. However, since _Labeling Machine_ relies on [SQLAlchemy](www.sqlalchemy.org), an ORM toolkit, you can use any other DB technology (MYSQL, PostgreSQL, etc.) with change of a couple of lines [here](webapp/src/__init__.py). 
    
 ## Deployment (with _Docker_)
 
