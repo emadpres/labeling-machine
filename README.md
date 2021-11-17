@@ -3,8 +3,8 @@
 
 **Labeling Machine** is a web application written in Python that is intended to be used by researchers for _labeling data_ with minimum effort. Here are some of its key features:  
 + **Very lightweight**: The tool is based on [Flask](https://flask.palletsprojects.com)
-+ **Ready to go and Dockerized**: Just follow [Deployment](https://github.com/emadpres/labeling-machine#deployment-with-docker) section to see a demo of the tool in 15 minutes
-+ **Easy to customize**: Follow [Customizing the Project](https://github.com/emadpres/labeling-machine#customizing-the-project) steps to quickly adopt teh tool for your project
++ **Ready to go and Dockerized**: Just follow [Deployment](#deployment-with-docker) section to see a demo of the tool in 15 minutes
++ **Easy to customize**: Follow [Customizing the Project](#customizing-the-project) steps to quickly adopt teh tool for your project
 
 
 ### Backstory
@@ -14,18 +14,18 @@ Labeling Machine was originally implemented back in 2019 to be internally used f
 
 ## Setting-Up Project for Development
 
-### Requirements
-- __Python 3.x__: Double check your python version
-    ```
-    # Check your Python version
-    $ python --version
-    Python 3.x
-    
-    $ pip --version
-    xxxxx (python 3.x)
-    ```
+### 1. Requirements
+Make sure _Python 3.x_ is installed
+```
+# Check your Python version
+$ python --version
+Python 3.x
 
-### Create `venv`
+$ pip --version
+xxxxx (python 3.x)
+```
+
+### 2. Create `venv`
 ```shell
 $ cd [Project]
 $ python3 -m venv ./venv
@@ -40,7 +40,7 @@ $ source ./venv/bin/activate
 $
 ```
    
-### Run Project in _PyCharm_
+### 3.a Run Project in _PyCharm_
 1. Open the project in PyCharm
 2. Configure the Python Interpreter: `Preference` > `Project interpreter` > `[Show All]` > `+` > path to `[Project]/venv/bin/python`
 3. Create run configurations:
@@ -50,18 +50,29 @@ $
         - Allow parallel run: _unchecked_
         - Script Path: _<absolute_path_to_project>/<venv>/bin/flask_
         - Parameters: _run_
-        - Environment variables: _FLASK_APP=src; FLASK_ENV=development;_
+        - Environment variables: `FLASK_APP=src; FLASK_ENV=development;`
         - Python Interpreter: Project default
-        - Working Directory: _<absolute_path_to_project>/lmwebapp/_
+        - Working Directory: _<absolute_path_to_project>/webapp/_
     2. `flask-initdb`: for database initialization for the first time
-        - Run > Edit Configurations > select newly created `flask-run` > Copy Configuration (Cmd+D)
+        - Run > Edit Configurations > select newly created `flask-run` > Copy Configuration
         - Name: _flask-initdb_
-        - Parameters: _initdb_
-4. Initialize the database (needed only first time): run `flask-initdb`
-   - Delete the existing database (`/db/app.sqlite`) for a fresh start
-5. Running WebApp: run `flask-run`
+        - Parameters: _initdb_ 
+          - Note that the `initdb` name for parameter comes from `@app.cli.command('initdb')`
 
-### Run Project from Terminal
+**Note:** If you want to make the server visible to externals (i.e., accepting connection from all network adapters): `(venv)$ flask run --host=0.0.0.0`
+
+Now we are ready to run the project:
+1. (**only first time**) Initialize the database by running `flask-initdb` configuration
+   - This will run the method associated with `@app.cli.command('initdb')`
+   - Delete the existing database (`/db/app.sqlite`) for a fresh start
+2. Run the WebApp by runing `flask-run` confguration
+   - The webapp will be running on http://127.0.0.1:5000 by default
+
+#### PyCharm Troubleshooting
+**Q1.** Why does PyCharm shows red lines all over the source code?
+- You should mark `[Project]/webapp/` folder as the root of source code: _right-click on the folder > Mark Directory as > Sources Root_ 
+
+### 3.b Run Project in Terminal
 ```shell
 $ source [Project]/venv/bin/activate
 (venv)$ cd [Project]/webapp/
@@ -73,7 +84,10 @@ $ source [Project]/venv/bin/activate
 
 (venv)$ flask initdb  # initialize the database for the first time
 (venv)$ flask run     # run the WebApp
+# The webapp will be running on http://127.0.0.1:5000 by default
 ```
+
+If you want to make the server visible to externals (i.e., accepting connection from all network adapters): `(venv)$ flask run --host=0.0.0.0`
 
 ## Customizing the Project
 Please follow steps below for customizing the project to your needs. For all steps I already implemented a sample showcase. If something is not clear, make sure to open an [issue](https://github.com/emadpres/labeling-machine/issues).
@@ -89,8 +103,8 @@ Please follow steps below for customizing the project to your needs. For all ste
     2. Update database schema to store submitted data on `LabelingData` table. For that, simply update `LabelingData` class in `models.py`.   
     3. Store submitted labels on the database by updating `routes_labeling.py > label()` method.
 
-**Database Technology**: By default, the tool uses _SQLite_ as the database technology. However, since _Labeling Machine_ relies on [SQLAlchemy](www.sqlalchemy.org), an ORM toolkit, you can use any other DB technology (MYSQL, PostgreSQL, etc.) with change of a couple of lines [here](webapp/src/__init__.py). 
-   
+**Database Technology**: By default, the tool uses _SQLite_ as the database technology. However, since _Labeling Machine_ relies on [SQLAlchemy](www.sqlalchemy.org), an ORM toolkit, you can use any other DB technology (MYSQL, PostgreSQL, etc.) with change of a couple of lines [here](webapp/src/__init__.py).
+
 ## Deployment (with _Docker_)
 
 ### I. Using `docker-compose`
@@ -115,25 +129,25 @@ $ docker stop lm-minimal
 $ docker rm lm-minimal
 ```
 
-<details>
-<summary>Deployment Troubleshooting</summary>
+<details open>
+<summary>Docker Troubleshooting</summary>
 
-1. Why I still see the old database, although I updated db in the new image?
-   - If Docker Volume for older container exist, the volume doesn't get replaced with new images. Otherwise, we couldn't update our image without losing our existing data.
-   - **Solution**:
-     1. Find "Volume Name": `docker inspect container_name` and look for `Mounts > Name` field.
-     2. Delete the volume: `docker volume rm volume_name`
-        - If it errors that volume is in use, try to stop container: `docker stop container_name` 
-        - Note: if you created the volume using `docker-compose` in the first place you have to remove the container:
-          1. `docker rm -v container_name` (`-v`: remove volume as well) 
-          2. `docker volume rm volume_name`  
+**Q1.** Why do I still see the old database, although I updated db in the new image?
+- If Docker Volume for older container exist, the volume doesn't get replaced with new images. Otherwise, we couldn't update our image without losing our existing data.
+- **Solution**:
+  1. Find the volume's name: `docker inspect <container_name>` and look for `Mounts > Name` field.
+  2. Delete the volume: `docker volume rm <volume_name>`
+     - If it errors that volume is in use, try to stop container: `docker stop <container_name>` 
+     - Note: if you created the volume using `docker-compose` in the first place you have to remove the container:
+       1. `docker rm -v <container_name>` (`-v`: remove volume as well) 
+       2. `docker volume rm <volume_name>`  
 
-2. How can I copy database from the running container?
-   - `docker cp container_name:/app/LabelingMachine/db/app.sqlite ~/local/path`
+**Q2.** How can I copy database from the running container?
+- `docker cp <container_name>:/labeling-machine/webapp/db/app.sqlite ~/local/path`
 
-3. How can I update the python code on the fly?
-    - `docker exec -it container_name /bin/bash`
-    - Do your changes
-    - `exit`
-    - **Note**: Such changes are not persistent, so it's better you update source-code and build a new image.
+**Q3.** How can I update the python code on the fly?
+1. `docker exec -it <container_name> /bin/bash`
+2. Do your changes
+3.`exit`
+3. **Note**: Such changes are not persistent, so it's better you update source-code and build a new image.
 </details>
