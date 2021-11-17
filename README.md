@@ -69,7 +69,7 @@ Now we are ready to run the project:
    - The webapp will be running on http://127.0.0.1:5000 by default
 
 #### PyCharm Troubleshooting
-**Q1.** Why does PyCharm shows red lines all over the source code?
+Q1. Why does PyCharm show red lines all over the source code?
 - You should mark `[Project]/webapp/` folder as the root of source code: _right-click on the folder > Mark Directory as > Sources Root_ 
 
 ### 3.b Run Project in Terminal
