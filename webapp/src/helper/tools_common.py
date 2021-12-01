@@ -80,9 +80,9 @@ def get_false_positive_artifacts():
     """
     Return artifacts marked as false positive by me, or marked as false positive by at least 2 people
     """
-    q_artifacts_marked_fp_by_me = db.session.query(distinct(FlaggedArtifact.added_by)).filter(
+    q_artifacts_marked_fp_by_me = db.session.query(distinct(FlaggedArtifact.artifact_id)).filter(
         FlaggedArtifact.added_by == who_is_signed_in())
-    q_artifacts_marked_fp_by_2 = db.session.query(distinct(FlaggedArtifact.added_by)).group_by(FlaggedArtifact.artifact_id).having(
+    q_artifacts_marked_fp_by_2 = db.session.query(distinct(FlaggedArtifact.artifact_id)).group_by(FlaggedArtifact.artifact_id).having(
         func.count() > 1)
     result = {row[0] for row in q_artifacts_marked_fp_by_me.union(q_artifacts_marked_fp_by_2).all()}
     return result
