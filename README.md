@@ -4,7 +4,7 @@
 **Labeling Machine** is a web application written in Python that is intended to be used by researchers for _labeling data_ with minimum effort. Here are some of its key features:  
 + **Very lightweight**: The tool is based on [Flask](https://flask.palletsprojects.com)
 + **Ready to go and Dockerized**: Just follow [Deployment](#deployment-with-docker) section to see a demo of the tool in 15 minutes
-+ **Easy to customize**: Follow [Customizing the Project](#customizing-the-project) steps to quickly adopt teh tool for your project
++ **Easy to customize**: Follow [Customizing the Project](#customizing-the-project) steps to quickly adopt the tool for your project
 
 
 ### Backstory
