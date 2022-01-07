@@ -129,7 +129,7 @@ $ docker stop lm-minimal
 $ docker rm lm-minimal
 ```
 
-<details open>
+<details>
 <summary>Docker Troubleshooting</summary>
 
 **Q1.** Why do I still see the old database, although I updated db in the new image?
@@ -148,6 +148,7 @@ $ docker rm lm-minimal
 **Q3.** How can I update the python code on the fly?
 1. `docker exec -it <container_name> /bin/bash`
 2. Do your changes
-3.`exit`
-3. **Note**: Such changes are not persistent, so it's better you update source-code and build a new image.
+3. `exit`
+   
+**Note**: Such changes are not persistent, so it's better you update source-code and build a new image.
 </details>
